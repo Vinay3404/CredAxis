@@ -12,7 +12,7 @@ function HomePage() {
           every transaction in real time.
         </p>
         <div className="hero-buttons">
-          <Link to="/contact-admin" className="btn btn-solid link-btn">
+          <Link to="/log-in" className="btn btn-solid link-btn">
             Start Payments
           </Link>
           <a href="#features" className="btn btn-outline-light link-btn">

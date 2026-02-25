@@ -1,12 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { logIn } from "../services/authService";
 
 function LogInPage() {
+  const navigate = useNavigate();
   const [formValues, setFormValues] = React.useState({
     userId: "",
     password: "",
   });
-  const [successMessage, setSuccessMessage] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
@@ -18,14 +19,13 @@ function LogInPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setErrorMessage("");
-    setSuccessMessage("");
     setIsSubmitting(true);
 
     try {
       const response = await logIn(formValues);
       localStorage.setItem("credaxis_token", response.token);
       localStorage.setItem("credaxis_user_id", response.userId);
-      setSuccessMessage("Login successful");
+      navigate("/dashboard");
     } catch (error) {
       setErrorMessage(error.message || "Unable to login");
     } finally {
@@ -67,7 +67,6 @@ function LogInPage() {
             {isSubmitting ? "Logging In..." : "Log In"}
           </button>
         </form>
-        {successMessage ? <p className="success-text auth-error">{successMessage}</p> : null}
         {errorMessage ? <p className="error-text auth-error">{errorMessage}</p> : null}
       </section>
     </main>

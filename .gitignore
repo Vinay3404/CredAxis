@@ -2,6 +2,7 @@ node_modules/
 dist/
 .vscode/
 backend/target/
+backend/*.log
 .env
 .env.*
 !.env.example

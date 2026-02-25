@@ -6,6 +6,9 @@ spring:
     url: ${DB_URL:jdbc:mysql://localhost:3306/credaxis?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:root}
+  web:
+    resources:
+      static-locations: classpath:/static/,file:../dist/
   jpa:
     hibernate:
       ddl-auto: update
