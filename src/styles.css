@@ -83,6 +83,12 @@ body {
   transform: translateY(-1px);
 }
 
+.btn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .btn-outline {
   background: rgba(255, 255, 255, 0.18);
   color: #fff;
@@ -250,6 +256,13 @@ h1 {
 .error-text {
   margin: 0.85rem 0 0;
   color: #d1142d;
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.success-text {
+  margin: 0.85rem 0 0;
+  color: #0f7a34;
   font-weight: 700;
   font-size: 0.92rem;
 }

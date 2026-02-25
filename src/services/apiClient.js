@@ -11,7 +11,22 @@ export async function apiRequest(path, options = {}) {
   });
 
   if (!response.ok) {
-    throw new Error(`API request failed: ${response.status}`);
+    const contentType = response.headers.get("content-type") ?? "";
+    let errorMessage = `API request failed: ${response.status}`;
+
+    if (contentType.includes("application/json")) {
+      const errorBody = await response.json();
+      if (errorBody?.message) {
+        errorMessage = errorBody.message;
+      }
+    } else {
+      const errorText = await response.text();
+      if (errorText) {
+        errorMessage = errorText;
+      }
+    }
+
+    throw new Error(errorMessage);
   }
 
   const contentType = response.headers.get("content-type") ?? "";
