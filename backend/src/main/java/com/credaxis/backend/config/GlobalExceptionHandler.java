@@ -1,6 +1,7 @@
 package com.credaxis.backend.config;
 
 import com.credaxis.backend.auth.InvalidCredentialsException;
+import com.credaxis.backend.payment.InsufficientWalletBalanceException;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,11 @@ public class GlobalExceptionHandler {
             message = firstError.getDefaultMessage();
         }
         return buildError(HttpStatus.BAD_REQUEST, message);
+    }
+
+    @ExceptionHandler(InsufficientWalletBalanceException.class)
+    public ResponseEntity<Map<String, String>> handleInsufficientWalletBalance(InsufficientWalletBalanceException ex) {
+        return buildError(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

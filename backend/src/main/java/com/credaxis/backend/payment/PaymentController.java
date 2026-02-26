@@ -2,6 +2,7 @@ package com.credaxis.backend.payment;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,11 @@ public class PaymentController {
 
     public PaymentController(PaymentService paymentService) {
         this.paymentService = paymentService;
+    }
+
+    @GetMapping("/wallet-summary")
+    public WalletSummaryResponse getWalletSummary() {
+        return paymentService.getWalletSummary();
     }
 
     @PostMapping("/load-money")

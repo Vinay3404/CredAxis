@@ -13,3 +13,7 @@ export function submitPayOut(payload) {
     body: JSON.stringify(payload),
   });
 }
+
+export function fetchWalletSummary() {
+  return apiRequest("/payments/wallet-summary");
+}

@@ -1,5 +1,9 @@
 import React from "react";
-import { submitLoadMoney, submitPayOut } from "../services/paymentService";
+import {
+  fetchWalletSummary,
+  submitLoadMoney,
+  submitPayOut,
+} from "../services/paymentService";
 
 function DashboardPage() {
   const userId = localStorage.getItem("credaxis_user_id") || "User";
@@ -7,6 +11,12 @@ function DashboardPage() {
   const [successMessage, setSuccessMessage] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isSummaryLoading, setIsSummaryLoading] = React.useState(false);
+  const [walletSummary, setWalletSummary] = React.useState({
+    totalLoadedAmount: 0,
+    totalPayOutAmount: 0,
+    availableWalletBalance: 0,
+  });
 
   const [loadMoneyForm, setLoadMoneyForm] = React.useState({
     phoneNumber: "",
@@ -19,7 +29,24 @@ function DashboardPage() {
     bankName: "",
     ifscCode: "",
     beneficiaryName: "",
+    amount: "",
   });
+
+  const loadWalletSummary = React.useCallback(async () => {
+    setIsSummaryLoading(true);
+    try {
+      const response = await fetchWalletSummary();
+      setWalletSummary(response);
+    } catch (error) {
+      setErrorMessage(error.message || "Unable to fetch wallet balance.");
+    } finally {
+      setIsSummaryLoading(false);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    loadWalletSummary();
+  }, [loadWalletSummary]);
 
   const handleLoadMoneyChange = (event) => {
     const { name, value } = event.target;
@@ -38,13 +65,17 @@ function DashboardPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await submitLoadMoney(loadMoneyForm);
+      const response = await submitLoadMoney({
+        ...loadMoneyForm,
+        amount: Number(loadMoneyForm.amount),
+      });
       setSuccessMessage(response.message || "Load money request submitted successfully.");
       setLoadMoneyForm({
         phoneNumber: "",
         name: "",
         amount: "",
       });
+      await loadWalletSummary();
     } catch (error) {
       setErrorMessage(error.message || "Unable to submit load money request.");
     } finally {
@@ -59,14 +90,19 @@ function DashboardPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await submitPayOut(payOutForm);
+      const response = await submitPayOut({
+        ...payOutForm,
+        amount: Number(payOutForm.amount),
+      });
       setSuccessMessage(response.message || "Pay out request submitted successfully.");
       setPayOutForm({
         phoneNumber: "",
         bankName: "",
         ifscCode: "",
         beneficiaryName: "",
+        amount: "",
       });
+      await loadWalletSummary();
     } catch (error) {
       setErrorMessage(error.message || "Unable to submit pay out request.");
     } finally {
@@ -74,17 +110,44 @@ function DashboardPage() {
     }
   };
 
+  const formatAmount = (value) =>
+    new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 2,
+    }).format(Number(value || 0));
+
   return (
-    <main className="content dashboard-content">
-      <section className="dashboard-header card">
-        <p className="eyebrow">Payments Dashboard</p>
-        <h1 className="dashboard-title">Welcome, {userId}</h1>
+    <main className="content dashboard-content premium-main">
+      <section className="dashboard-header card ops-header">
+        <p className="eyebrow">Operations Console</p>
+        <h1 className="dashboard-title">Wallet & Payout Control Center</h1>
         <p className="dashboard-subtitle">
-          Choose an action to continue your payment operations.
+          Logged in as <strong>{userId}</strong>. Manage your secure
+          credit-card withdrawals and bank payouts from one place.
         </p>
       </section>
 
-      <section className="dashboard-actions">
+      <section className="wallet-metrics">
+        <article className="card metric-card metric-primary">
+          <p>Available Wallet Balance</p>
+          <h3>
+            {isSummaryLoading
+              ? "Loading..."
+              : formatAmount(walletSummary.availableWalletBalance)}
+          </h3>
+        </article>
+        <article className="card metric-card">
+          <p>Total Card Withdrawn</p>
+          <h3>{isSummaryLoading ? "Loading..." : formatAmount(walletSummary.totalLoadedAmount)}</h3>
+        </article>
+        <article className="card metric-card">
+          <p>Total Sent to Bank</p>
+          <h3>{isSummaryLoading ? "Loading..." : formatAmount(walletSummary.totalPayOutAmount)}</h3>
+        </article>
+      </section>
+
+      <section className="dashboard-actions dashboard-tabs">
         <button
           type="button"
           className={`btn ${activeForm === "load-money" ? "btn-solid" : "btn-outline-dark"}`}
@@ -94,7 +157,7 @@ function DashboardPage() {
             setErrorMessage("");
           }}
         >
-          Load Money
+          Load Money (Card to Wallet)
         </button>
         <button
           type="button"
@@ -105,13 +168,16 @@ function DashboardPage() {
             setErrorMessage("");
           }}
         >
-          Pay Out
+          Pay Out (Wallet to Bank)
         </button>
       </section>
 
       {activeForm === "load-money" ? (
-        <section className="auth-card dashboard-form-card">
-          <h2 className="auth-title">Load Money Form</h2>
+        <section className="auth-card dashboard-form-card ops-form-card">
+          <h2 className="auth-title">Load Money: Credit Card to Wallet</h2>
+          <p className="auth-subtitle">
+            Capture withdrawal amount and credit it into your operational wallet.
+          </p>
           <form className="auth-form" onSubmit={handleLoadMoneySubmit}>
             <label htmlFor="load-phone-number">Phone Number</label>
             <input
@@ -153,8 +219,11 @@ function DashboardPage() {
           </form>
         </section>
       ) : (
-        <section className="auth-card dashboard-form-card">
-          <h2 className="auth-title">Pay Out Form</h2>
+        <section className="auth-card dashboard-form-card ops-form-card">
+          <h2 className="auth-title">Pay Out: Wallet to Bank Account</h2>
+          <p className="auth-subtitle">
+            Send available wallet funds to a beneficiary bank account.
+          </p>
           <form className="auth-form" onSubmit={handlePayOutSubmit}>
             <label htmlFor="payout-phone-number">Phone Number</label>
             <input
@@ -196,6 +265,18 @@ function DashboardPage() {
               type="text"
               placeholder="Enter beneficiary name"
               value={payOutForm.beneficiaryName}
+              onChange={handlePayOutChange}
+              required
+            />
+
+            <label htmlFor="payout-amount">Amount</label>
+            <input
+              id="payout-amount"
+              name="amount"
+              type="number"
+              min="1"
+              placeholder="Enter payout amount"
+              value={payOutForm.amount}
               onChange={handlePayOutChange}
               required
             />

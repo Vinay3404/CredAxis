@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,6 +30,9 @@ public class PayOutTransaction {
     @Column(name = "beneficiary_name", nullable = false, length = 120)
     private String beneficiaryName;
 
+    @Column(name = "amount", nullable = false, precision = 15, scale = 2)
+    private BigDecimal amount;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -39,12 +43,14 @@ public class PayOutTransaction {
             String phoneNumber,
             String bankName,
             String ifscCode,
-            String beneficiaryName
+            String beneficiaryName,
+            BigDecimal amount
     ) {
         this.phoneNumber = phoneNumber;
         this.bankName = bankName;
         this.ifscCode = ifscCode;
         this.beneficiaryName = beneficiaryName;
+        this.amount = amount;
     }
 
     @PrePersist
@@ -70,6 +76,10 @@ public class PayOutTransaction {
 
     public String getBeneficiaryName() {
         return beneficiaryName;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
     }
 
     public LocalDateTime getCreatedAt() {

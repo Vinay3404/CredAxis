@@ -4,47 +4,64 @@ import { Link } from "react-router-dom";
 function HomePage() {
   return (
     <>
-      <section className="hero content">
-        <p className="eyebrow">Digital Payments Platform</p>
-        <h1 className="hero-title">Fast, Secure, and Scalable Payment Experiences</h1>
+      <section className="hero content premium-hero">
+        <div className="hero-badge">Enterprise Withdrawals Platform</div>
+        <h1 className="hero-title">
+          Withdraw From Credit Cards, Fund Wallets, and Payout to Bank Accounts
+        </h1>
         <p className="subtitle">
-          Build reliable checkout flows, automate settlements, and monitor
-          every transaction in real time.
+          CredAxis helps operations teams move funds in a controlled flow:
+          Card to Wallet, then Wallet to Beneficiary Bank Account, with complete
+          visibility and traceability.
         </p>
         <div className="hero-buttons">
           <Link to="/log-in" className="btn btn-solid link-btn">
-            Start Payments
+            Open Operations Console
           </Link>
-          <a href="#features" className="btn btn-outline-light link-btn">
-            See Features
+          <a href="#flow" className="btn btn-outline-light link-btn">
+            View Transaction Flow
           </a>
         </div>
       </section>
 
-      <main id="features" className="content content-main">
-        <section className="card">
-          <h2>Why Payment Teams Choose CredAxis</h2>
-          <p>
-            Unified APIs for cards, wallets, bank transfers, and fast
-            settlements with built-in controls.
-          </p>
+      <main id="features" className="content content-main premium-main">
+        <section id="flow" className="flow-strip card">
+          <div className="flow-step">
+            <h3>1. Card Withdrawal</h3>
+            <p>Capture approved withdrawal amount from customer credit card.</p>
+          </div>
+          <div className="flow-arrow">→</div>
+          <div className="flow-step">
+            <h3>2. Wallet Credit</h3>
+            <p>Instantly reflect collected funds in your platform wallet.</p>
+          </div>
+          <div className="flow-arrow">→</div>
+          <div className="flow-step">
+            <h3>3. Bank Pay Out</h3>
+            <p>Transfer wallet balance to beneficiary bank account securely.</p>
+          </div>
         </section>
-        <section className="card-grid">
-          <article className="card">
-            <h3>Smart Checkout</h3>
-            <p>Optimize conversion with low-latency, mobile-first payment UI.</p>
-          </article>
-          <article className="card">
-            <h3>Secure Processing</h3>
+
+        <section className="card-grid premium-grid">
+          <article className="card premium-card">
+            <h3>Operational Wallet Ledger</h3>
             <p>
-              Built-in tokenization and adaptive risk checks for safer payments.
+              Track available wallet balance in real-time with clear loaded and
+              paid-out totals.
             </p>
           </article>
-          <article className="card">
-            <h3>Live Insights</h3>
+          <article className="card premium-card">
+            <h3>Banking-Grade Data Capture</h3>
             <p>
-              Track transaction health, success rates, and payout status in one
-              dashboard.
+              Structured forms for payout operations including IFSC, bank, and
+              beneficiary details.
+            </p>
+          </article>
+          <article className="card premium-card">
+            <h3>Role-Ready Foundation</h3>
+            <p>
+              Built to extend into admin approvals, role-based access control,
+              and audit workflows.
             </p>
           </article>
         </section>

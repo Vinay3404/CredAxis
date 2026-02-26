@@ -40,7 +40,8 @@ This runs both UI and API on `http://localhost:8080` using Spring Boot (embedded
     `{"phoneNumber":"9876543210","name":"Test User","amount":100}`
 - Pay Out: `POST http://localhost:8080/api/payments/pay-out`
   - Request body:
-    `{"phoneNumber":"9876543210","bankName":"HDFC","ifscCode":"HDFC0001234","beneficiaryName":"Beneficiary Test"}`
+    `{"phoneNumber":"9876543210","bankName":"HDFC","ifscCode":"HDFC0001234","beneficiaryName":"Beneficiary Test","amount":50}`
+- Wallet Summary: `GET http://localhost:8080/api/payments/wallet-summary`
 
 ## Default seeded login
 - userId: `admin`
