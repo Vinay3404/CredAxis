@@ -1,9 +1,14 @@
 import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import AdminRoute from "./components/AdminRoute";
 import Layout from "./components/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
 import ContactAdminPage from "./pages/ContactAdminPage";
+import AdminUsersPage from "./pages/AdminUsersPage";
+import DashboardPage from "./pages/DashboardPage";
 import HomePage from "./pages/HomePage";
 import LogInPage from "./pages/LogInPage";
+import ReportsPage from "./pages/ReportsPage";
 import SignInPage from "./pages/SignInPage";
 
 function App() {
@@ -15,6 +20,30 @@ function App() {
           <Route path="/contact-admin" element={<ContactAdminPage />} />
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/log-in" element={<LogInPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/reports"
+            element={
+              <ProtectedRoute>
+                <ReportsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <AdminRoute>
+                <AdminUsersPage />
+              </AdminRoute>
+            }
+          />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
