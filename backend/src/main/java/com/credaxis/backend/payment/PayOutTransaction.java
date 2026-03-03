@@ -21,6 +21,9 @@ public class PayOutTransaction {
     @Column(name = "phone_number", nullable = false, length = 20)
     private String phoneNumber;
 
+    @Column(name = "user_id", length = 120)
+    private String userId;
+
     @Column(name = "bank_name", nullable = false, length = 150)
     private String bankName;
 
@@ -46,6 +49,18 @@ public class PayOutTransaction {
             String beneficiaryName,
             BigDecimal amount
     ) {
+        this(null, phoneNumber, bankName, ifscCode, beneficiaryName, amount);
+    }
+
+    public PayOutTransaction(
+            String userId,
+            String phoneNumber,
+            String bankName,
+            String ifscCode,
+            String beneficiaryName,
+            BigDecimal amount
+    ) {
+        this.userId = userId;
         this.phoneNumber = phoneNumber;
         this.bankName = bankName;
         this.ifscCode = ifscCode;
@@ -64,6 +79,10 @@ public class PayOutTransaction {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public String getBankName() {

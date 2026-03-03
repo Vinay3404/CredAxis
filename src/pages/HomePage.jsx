@@ -5,6 +5,9 @@ function HomePage() {
   return (
     <>
       <section className="hero content premium-hero">
+        <div className="hero-wordmark-wrap">
+          <img src="/credaxis-wordmark.svg" className="hero-wordmark" alt="CredAxis" />
+        </div>
         <div className="hero-badge">Enterprise Withdrawals Platform</div>
         <h1 className="hero-title">
           Withdraw From Credit Cards, Fund Wallets, and Payout to Bank Accounts
@@ -30,12 +33,12 @@ function HomePage() {
             <h3>1. Card Withdrawal</h3>
             <p>Capture approved withdrawal amount from customer credit card.</p>
           </div>
-          <div className="flow-arrow">→</div>
+          <div className="flow-arrow">-&gt;</div>
           <div className="flow-step">
             <h3>2. Wallet Credit</h3>
             <p>Instantly reflect collected funds in your platform wallet.</p>
           </div>
-          <div className="flow-arrow">→</div>
+          <div className="flow-arrow">-&gt;</div>
           <div className="flow-step">
             <h3>3. Bank Pay Out</h3>
             <p>Transfer wallet balance to beneficiary bank account securely.</p>
@@ -71,3 +74,4 @@ function HomePage() {
 }
 
 export default HomePage;
+

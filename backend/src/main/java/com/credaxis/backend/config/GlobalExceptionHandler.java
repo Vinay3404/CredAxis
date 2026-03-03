@@ -1,6 +1,8 @@
 package com.credaxis.backend.config;
 
+import com.credaxis.backend.auth.ForbiddenAccessException;
 import com.credaxis.backend.auth.InvalidCredentialsException;
+import com.credaxis.backend.auth.UnauthorizedAccessException;
 import com.credaxis.backend.payment.InsufficientWalletBalanceException;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +21,16 @@ public class GlobalExceptionHandler {
         return buildError(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
+    @ExceptionHandler(UnauthorizedAccessException.class)
+    public ResponseEntity<Map<String, String>> handleUnauthorized(UnauthorizedAccessException ex) {
+        return buildError(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
+    @ExceptionHandler(ForbiddenAccessException.class)
+    public ResponseEntity<Map<String, String>> handleForbidden(ForbiddenAccessException ex) {
+        return buildError(HttpStatus.FORBIDDEN, ex.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException ex) {
         String message = "Invalid request";
@@ -27,6 +39,11 @@ public class GlobalExceptionHandler {
             message = firstError.getDefaultMessage();
         }
         return buildError(HttpStatus.BAD_REQUEST, message);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> handleBadRequest(IllegalArgumentException ex) {
+        return buildError(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(InsufficientWalletBalanceException.class)

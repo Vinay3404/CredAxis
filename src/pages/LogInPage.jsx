@@ -25,7 +25,15 @@ function LogInPage() {
       const response = await logIn(formValues);
       localStorage.setItem("credaxis_token", response.token);
       localStorage.setItem("credaxis_user_id", response.userId);
-      navigate("/dashboard");
+      localStorage.setItem("credaxis_role", response.role || "USER");
+      localStorage.setItem("credaxis_kyc_status", response.kycStatus || "PENDING");
+      localStorage.setItem("credaxis_login_ip", response.loginIp || "");
+
+      if (response.role === "ADMIN") {
+        navigate("/admin/users");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error) {
       setErrorMessage(error.message || "Unable to login");
     } finally {

@@ -21,6 +21,9 @@ public class LoadMoneyTransaction {
     @Column(name = "phone_number", nullable = false, length = 20)
     private String phoneNumber;
 
+    @Column(name = "user_id", length = 120)
+    private String userId;
+
     @Column(name = "customer_name", nullable = false, length = 120)
     private String name;
 
@@ -34,6 +37,11 @@ public class LoadMoneyTransaction {
     }
 
     public LoadMoneyTransaction(String phoneNumber, String name, BigDecimal amount) {
+        this(null, phoneNumber, name, amount);
+    }
+
+    public LoadMoneyTransaction(String userId, String phoneNumber, String name, BigDecimal amount) {
+        this.userId = userId;
         this.phoneNumber = phoneNumber;
         this.name = name;
         this.amount = amount;
@@ -50,6 +58,10 @@ public class LoadMoneyTransaction {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public String getName() {
